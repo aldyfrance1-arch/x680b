@@ -1,8 +1,12 @@
 import /microtrust.rc
 
 on init
-mkdir /mnt/vendor/persist 0700 root root
-
+   mkdir /mnt/vendor/persist 0700 root root
+   start gatekeeper-1-0
+   start keymaster-4-0
+   start health-hal-2-0
+   start teei_daemon
+   start keystore
 on post-fs
     # Support A/B feature for emmc boot region
     symlink /dev/block/sda /dev/block/mmcblk0boot0
@@ -13,6 +17,7 @@ on post-fs
 on property:crypto.ready=1 && property:ro.crypto.state=encrypted
     start keymaster-4-0
     start gatekeeper-1-0
+    start keystore
 
 service keystore_auth /system/bin/keystore_auth
     oneshot
@@ -45,6 +50,7 @@ on property:hwservicemanager.ready=true
     start teei_daemon
     start keymaster-4-0
     start gatekeeper-1-0
+    start keystore
 
 on property:ro.crypto.state=unsupported
     stop teei_daemon
@@ -61,11 +67,7 @@ on property:twrp.all.users.decrypted=true
     stop keymaster-4-0
     stop gatekeeper-1-0
 
-on boot
-   start gatekeeper-1-0
-   start keymaster-4-0
-   start health-hal-2-0
-   start teei_daemon
+
    #start eadb
 
 
