@@ -1,5 +1,5 @@
 import /microtrust.rc
-
+fscrypt
 on init
    mkdir /mnt/vendor/persist 0700 root root
    start gatekeeper-1-0
