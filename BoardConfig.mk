@@ -96,6 +96,7 @@ TW_INCLUDE_CRYPTO_FBE := true
 #TW_USE_FSCRYPT_POLICY := 2
 #TW_INCLUDE_FBE_METADATA_DECRYPT := true
 #TW_INCLUDE_FBE := true
+BOARD_FORCE_ENCRYPT := true
 
 # # Hack: prevent anti roll back
 PLATFORM_SECURITY_PATCH := 2099-12-31
@@ -131,6 +132,14 @@ Tw_INCLUDE_LIBRESETPROP := true
 # Maintainer/Version
 TW_DEVICE_VERSION := infinix-X680B-Massatrio16
 
+# Recovery modules
+TARGET_RECOVERY_DEVICE_MODULES += \
+    libkeymaster4 \
+    libpuresoftkeymasterdevice
+
+RECOVERY_LIBRARY_SOURCE_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so
     
 TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
 $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4 \
