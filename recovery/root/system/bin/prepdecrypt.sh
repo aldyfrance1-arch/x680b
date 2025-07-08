@@ -1,4 +1,4 @@
 #!/sbin/sh
-  setprop crypto.ready 1
+  #setprop crypto.ready 1
 
 
