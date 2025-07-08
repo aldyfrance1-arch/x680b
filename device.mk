@@ -13,8 +13,11 @@ PRODUCT_PACKAGES += \
     libhealthd.$(PRODUCT_PLATFORM)
 
 PRODUCT_PACKAGES_DEBUG += \
-    bootctrl.mt6762 \
-    bootctrl.mt6765
+    bootctrl
+    
+    PRODUCT_PACKAGES += \
+    bootctrl.mt6765 \
+    bootctrl.mt6762
 
 PRODUCT_PACKAGES_DEBUG += \
     update_engine_client
