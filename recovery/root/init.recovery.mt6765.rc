@@ -4,11 +4,8 @@ import /microtrust.rc
 on boot
    start gatekeeper-1-0
    start keymaster-4-0
-   start health-hal-2-1
-   start boot-hal-1-2
    start teei_daemon
    start keymaster_attestation-1-1
-   start keystore2
    
    
 on post-fs

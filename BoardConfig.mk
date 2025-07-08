@@ -105,7 +105,7 @@ PLATFORM_VERSION := 16.1.0
     
     
 # Properties
-TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
+#TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 
@@ -134,16 +134,3 @@ TW_DEVICE_VERSION := infinix-X680B-Massatrio16
 
 
     
-TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
-$(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4 \
-$(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4.so \
-$(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4support \
-$(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4support.so \
-$(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice \
-$(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so \
-$(TARGET_OUT_SHARED_LIBRARIES)/libTEECommon \
-$(TARGET_OUT_SHARED_LIBRARIES)/libTEECommon.so \
-$(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster_messages \
-$(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster_messages.so \
-$(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster_portable \
-$(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster_portable.so \
