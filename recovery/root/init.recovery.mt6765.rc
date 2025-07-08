@@ -4,12 +4,11 @@ import /microtrust.rc
 on boot
    start gatekeeper-1-0
    start keymaster-4-0
-   start health-hal-2-0
-   start boot-hal-1-0
+   start health-hal-2-1
+   start boot-hal-1-2
    start teei_daemon
-   start keystore
    start keymaster_attestation-1-1
-   
+   start keystore2
 on post-fs
     # Support A/B feature for emmc boot region
     symlink /dev/block/sda /dev/block/mmcblk0boot0
@@ -45,7 +44,7 @@ service keystore_auth /system/bin/keystore_auth
     disabled
     seclabel u:r:recovery:s0
 
-service keystore /system/bin/keystore /tmp/misc/keystore
+service keystore2 /system/bin/keystore2 /tmp/misc/keystore
     user root
     group root drmrpc readproc
     disabled

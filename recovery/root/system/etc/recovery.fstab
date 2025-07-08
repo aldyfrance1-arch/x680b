@@ -1,4 +1,4 @@
->#<src>                                            <mnt_point>  <type>  <mnt_flags and options>                              <fs_mgr_flags>
+#<src>                                            <mnt_point>  <type>  <mnt_flags and options>                              <fs_mgr_flags>
 system                                             /system      ext4    ro                                                   wait,slotselect,logical
 vendor                                             /vendor      ext4    ro                                                   wait,slotselect,logical
 
