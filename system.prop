@@ -1,5 +1,4 @@
 ro.crypto.state=encrypted
-ro.hardware=mt6765
 ro.hardware.kmsetkey=beanpod
 ro.hardware.gatekeeper=beanpod
 ro.vendor.mtk_microtrust_tee_support=1

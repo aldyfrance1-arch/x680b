@@ -5,6 +5,7 @@ on boot
    start gatekeeper-1-0
    start keymaster-4-0
    start health-hal-2-0
+   start boot-hal-1-0
    start teei_daemon
    start keystore
    start keymaster_attestation-1-1
