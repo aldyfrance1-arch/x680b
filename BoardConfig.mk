@@ -20,8 +20,6 @@ TARGET_BOARD_SUFFIX := _64
 TARGET_USES_64_BIT_BINDER := true
 
 
-
-
 # Assert
 TARGET_OTA_ASSERT_DEVICE := Infinix-X680B
 
@@ -129,6 +127,7 @@ TW_INCLUDE_REPACKTOOLS := true
 TW_INCLUDE_RESETPROP := true
 Tw_INCLUDE_LIBRESETPROP := true
 TW_EXCLUDE_APEX := true
+
 # Maintainer/Version
 TW_DEVICE_VERSION := infinix-X680B-Massatrio16
 

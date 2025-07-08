@@ -1,15 +1,15 @@
 LOCAL_PATH := device/infinix/X680B
 
-PRODUCT_TARGET_VNDK_VERSION := 29
-PRODUCT_SHIPPING_API_LEVEL := 29
+PRODUCT_TARGET_VNDK_VERSION := 30
+PRODUCT_SHIPPING_API_LEVEL := 30
 
 PRODUCT_PACKAGES += \
-    android.hardware.boot@1.1-impl \
-    android.hardware.boot@1.1-impl-recovery
+    android.hardware.boot@1.0-impl \
+    android.hardware.boot@1.0-impl-recovery
 
 PRODUCT_PACKAGES += \
-    android.hardware.health@2.1-impl \
-    android.hardware.health@2.1-service \
+    android.hardware.health@2.0-impl \
+    android.hardware.health@2.0-service \
     libhealthd.$(PRODUCT_PLATFORM)
 
 PRODUCT_PACKAGES_DEBUG += \
@@ -25,6 +25,7 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 # Fastbootd
 PRODUCT_PACKAGES += \
+    android.hardware.fastboot@1.0-impl-mtk \
     android.hardware.fastboot@1.0-impl-mock \
     fastbootd
 
