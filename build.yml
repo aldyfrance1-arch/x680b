@@ -1,0 +1,38 @@
+name: Build TWRP
+
+on: [workflow_dispatch, push]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    
+    steps:
+    - name: Checkout device tree
+      uses: actions/checkout@v3
+      with:
+        path: device/infinix/x680b
+        
+    - name: Setup environment
+      run: |
+        sudo apt update
+        sudo apt install -y git repo python3 ccache
+        
+    - name: Initialize repo
+      run: |
+        mkdir twrp && cd twrp
+        repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1 --depth=1
+        
+    - name: Build TWRP
+      run: |
+        cd twrp
+        export ALLOW_MISSING_DEPENDENCIES=true
+        source build/envsetup.sh
+        lunch twrp_x680b-eng
+        make recoveryimage -j$(nproc)
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: TWRP-Recovery
+        path: twrp/out/target/product/x680b/recovery.img￼Enter
