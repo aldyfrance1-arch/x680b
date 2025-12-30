@@ -1,0 +1,139 @@
+name: Build TWRP for X680B
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    
+    steps:
+    - name: Check Repository Branches
+      run: |
+        echo "Repository: ${{ github.repository }}"
+        curl -s "https://api.github.com/repos/${{ github.repository }}/branches" | grep -o '"name":"[^"]*"' | cut -d'"' -f4
+        
+    - name: Checkout Device Tree
+      uses: actions/checkout@v4
+      with:
+        path: x680b-source
+        fetch-depth: 1
+        
+    - name: Setup Build Environment
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y \
+          git-core gnupg flex bison build-essential zip curl zlib1g-dev \
+          gcc-multilib g++-multilib libc6-dev-i386 libncurses5 \
+          lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev \
+          libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig \
+          python3 android-tools-adb bc imagemagick ccache schedtool \
+          rsync libssl-dev openjdk-11-jdk repo
+        
+    - name: Initialize TWRP Repo
+      run: |
+        mkdir -p ~/twrp
+        cd ~/twrp
+        repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git \
+          -b twrp-12.1 \
+          --depth=1
+        
+    - name: Sync TWRP Source
+      run: |
+        cd ~/twrp
+        repo sync -c -j4 \
+          --force-sync \
+          --no-clone-bundle \
+          --no-tags \
+          --optimized-fetch
+        
+    - name: Copy Device Tree
+      run: |
+        cd ~/twrp
+        mkdir -p device/infinix/x680b
+        cp -r $GITHUB_WORKSPACE/x680b-source/* device/infinix/x680b/
+        ls -la device/infinix/x680b/
+        
+    - name: Configure Build
+      run: |
+        cd ~/twrp
+        export ALLOW_MISSING_DEPENDENCIES=true
+        export LC_ALL=C
+        export USE_CCACHE=1
+        ccache -M 10G
+        
+        # Cek apakah device tree valid
+        if [ -f device/infinix/x680b/AndroidProducts.mk ]; then
+          echo "Device tree structure OK"
+        else
+          echo "WARNING: Device tree might be incomplete"
+          find device/infinix/x680b -name "*.mk" | head -5
+        fi
+        
+        source build/envsetup.sh
+        
+        # Coba berbagai kemungkinan lunch command
+        lunch twrp_x680b-eng || \
+        lunch omni_x680b-eng || \
+        { 
+          echo "Setting up manual lunch...";
+          export TARGET_DEVICE=x680b;
+          export TARGET_PRODUCT=twrp_x680b;
+        }
+        
+    - name: Build Recovery
+      run: |
+        cd ~/twrp
+        export ALLOW_MISSING_DEPENDENCIES=true
+        
+        # Build dengan fallback options
+        make recoveryimage -j$(nproc) || \
+        make bootimage -j$(nproc) || \
+        { 
+          echo "Trying clean build...";
+          make clean;
+          make recoveryimage -j2;
+        }
+        
+    - name: Check Build Output
+      run: |
+        cd ~/twrp
+        echo "=== Build Output ==="
+        find out/target/product -name "*.img" -type f 2>/dev/null | head -10 || echo "No images found"
+        
+        if [ -f out/target/product/x680b/recovery.img ]; then
+          echo "✓ RECOVERY.IMG FOUND"
+          file out/target/product/x680b/recovery.img
+          ls -lh out/target/product/x680b/recovery.img
+        else
+          echo "✗ Recovery.img not found"
+          echo "Available files in out/target/product/x680b/:"
+          ls -la out/target/product/x680b/ 2>/dev/null || echo "Directory not exists"
+        fi
+        
+    - name: Upload Recovery Image
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: TWRP-X680B
+        path: |
+          ~/twrp/out/target/product/x680b/recovery.img
+          ~/twrp/out/target/product/x680b/boot.img
+        if-no-files-found: warn
+        retention-days: 7
+        
+    - name: Upload Build Logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: Build-Logs
+        path: |
+          ~/twrp/out/verbose.log
+          ~/twrp/build.log
+        if-no-files-found: ignore￼Enter
